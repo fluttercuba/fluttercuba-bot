@@ -89,7 +89,7 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 
-def callback_alarm(context: telegram.ext.CallbackContext):
+def callback_alarm(context):
     context.bot.send_message(chat_id=context.job.context, text='BEEP')
 
 
