@@ -1,0 +1,7 @@
+venv
+.vscode
+*.session*
+__pycache__
+.pytest_cache
+.env
+experiments.txt
