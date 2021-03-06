@@ -12,8 +12,8 @@ load_dotenv()
 # Variables
 api_id = os.getenv('TELEGRAM_API_ID')
 api_hash = os.getenv('TELEGRAM_API_HASH')
-COUNT_PER_PAGE_DEVTO = 1
-
+COUNT_PER_PAGE_DEVTO = 2
+INTERVAL_BY_HOURS = 3600  # 1h
 # # clients
 bot = commands.Bot(command_prefix='!')
 
@@ -89,18 +89,27 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 
+def callback_alarm(context: telegram.ext.CallbackContext):
+    context.bot.send_message(chat_id=context.job.context, text='BEEP')
+
+
 def main():
     """Start the bot."""
     updater = Updater(os.getenv("TELEGRAM_TOKEN"))
     dp = updater.dispatcher
+    j = updater.job_queue
     dp.add_handler(CommandHandler("start", start))
-
+    # job queue
+    j.run_repeating(callback_alarm, interval=INTERVAL_BY_HOURS, first=0)
     # add handlers
-    updater.start_webhook(listen="0.0.0.0",
-                          port=os.getenv("PORT"),
-                          url_path=os.getenv("TELEGRAM_TOKEN"))
+    updater.start_webhook(
+        listen="0.0.0.0",
+        port=os.getenv("PORT"),
+        url_path=os.getenv("TELEGRAM_TOKEN"),
+    )
     updater.bot.set_webhook(
-        "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"))
+        "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"),
+    )
     bot.run(os.getenv('DISCORD_TOKEN'))
     updater.idle()
 
