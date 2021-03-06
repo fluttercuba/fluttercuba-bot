@@ -4,16 +4,17 @@ import discord
 import requests
 from telethon import TelegramClient, events, sync
 from discord.ext import commands
-# from dotenv import load_dotenv
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 # Variables
 api_id = os.getenv('TELEGRAM_API_ID')
 api_hash = os.getenv('TELEGRAM_API_HASH')
 COUNT_PER_PAGE_DEVTO = 1
 
-# clients
+# # clients
 bot = commands.Bot(command_prefix='!')
 
 client_telegram = TelegramClient(
@@ -43,7 +44,7 @@ async def on_member_join(member):
 async def info(ctx):
     await ctx.send("""
     github: https://github.com/fluttercuba
-    discord: https://discord.gg/CtdVKf5w 
+    discord: https://discord.gg/CtdVKf5w
     telegram: https://t.me/fluttercuba
     twitter: https://twitter.com/flutterCuba
     """)
@@ -75,7 +76,6 @@ async def articles(ctx, arg):
         await channel.send(embed=embed)
 
 
-# telegram handler
 @client_telegram.on(events.NewMessage(chats=[1486641070], pattern="(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+"))
 async def handler(event):
     message = event.original_update.to_dict()
@@ -84,4 +84,27 @@ async def handler(event):
     await channel.send(message_text)
 
 
-bot.run(os.getenv('DISCORD_TOKEN'))
+def start(update, context):
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
+
+
+def main():
+    """Start the bot."""
+    updater = Updater(os.getenv("TELEGRAM_TOKEN"))
+    dp = updater.dispatcher
+    dp.add_handler(CommandHandler("start", start))
+
+    # add handlers
+    updater.start_webhook(listen="0.0.0.0",
+                          port=os.getenv("PORT"),
+                          url_path=os.getenv("TELEGRAM_TOKEN"))
+    updater.bot.set_webhook(
+        "https://fluttercuba-app.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"))
+    bot.run(os.getenv('DISCORD_TOKEN'))
+
+    updater.idle()
+
+
+if __name__ == '__main__':
+    main()
