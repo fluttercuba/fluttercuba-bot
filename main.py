@@ -100,9 +100,8 @@ def main():
                           port=os.getenv("PORT"),
                           url_path=os.getenv("TELEGRAM_TOKEN"))
     updater.bot.set_webhook(
-        "https://fluttercuba-app.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"))
+        "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"))
     bot.run(os.getenv('DISCORD_TOKEN'))
-
     updater.idle()
 
 
