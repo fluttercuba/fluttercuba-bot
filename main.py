@@ -13,7 +13,7 @@ load_dotenv()
 api_id = os.getenv('TELEGRAM_API_ID')
 api_hash = os.getenv('TELEGRAM_API_HASH')
 COUNT_PER_PAGE_DEVTO = 2
-INTERVAL_BY_HOURS = 3600  # 1h
+INTERVAL_BY_HOURS = 1800  # 30m
 # # clients
 bot = commands.Bot(command_prefix='!')
 
