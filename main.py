@@ -4,9 +4,9 @@ import discord
 import requests
 from telethon import TelegramClient, events, sync
 from discord.ext import commands
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 # Variables
 api_id = os.getenv('TELEGRAM_API_ID')
