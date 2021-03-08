@@ -1,14 +1,11 @@
-import re
-import os
-import discord
-import requests
-from telethon import TelegramClient, events, sync
-from discord.ext import commands
+from discord import Webhook, RequestsWebhookAdapter
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import MessageEntity
+import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
+<<<<<<< HEAD
 # Variables
 api_id = os.getenv('TELEGRAM_API_ID')
 api_hash = os.getenv('TELEGRAM_API_HASH')
@@ -84,24 +81,27 @@ async def handler(event):
     await channel.send(message_text)
 
 
+=======
+>>>>>>> 427d2787a1468b3ba7298163ee757286801a74ad
 def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
-
-
-def callback_alarm(context):
-    context.bot.send_message(chat_id=context.job.context, text='BEEP')
-
-
+    update.message.reply_text("Hey Flutter Cuba ")
+def share_url_callback(update, context):
+    webhook = Webhook.from_url(
+        url=os.getenv("DISCORD_WEBHOOK"),
+        adapter=RequestsWebhookAdapter(),
+    )
+    webhook.send(update.message.text, username='fluttercuba-bot')
+    update.message.reply_text("compartiendo url...")
 def main():
     """Start the bot."""
     updater = Updater(os.getenv("TELEGRAM_TOKEN"))
     dp = updater.dispatcher
-    j = updater.job_queue
     dp.add_handler(CommandHandler("start", start))
-    # job queue
-    j.run_repeating(callback_alarm, interval=INTERVAL_BY_HOURS, first=0)
-    # add handlers
+    url_handler = MessageHandler(
+    Filters.text & (Filters.entity(MessageEntity.URL) |
+                    Filters.entity(MessageEntity.TEXT_LINK)),
+    share_url_callback)
+    dp.add_handler(url_handler)
     updater.start_webhook(
         listen="0.0.0.0",
         port=os.getenv("PORT"),
@@ -110,7 +110,7 @@ def main():
     updater.bot.set_webhook(
         "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"),
     )
-    bot.run(os.getenv('DISCORD_TOKEN'))
+
     updater.idle()
 
 
