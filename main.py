@@ -38,7 +38,7 @@ def main():
     dp.add_handler(CommandHandler("info", info))
     url_handler = MessageHandler(
         Filters.text & (Filters.entity(MessageEntity.URL) |
-                        Filters.entity(MessageEntity.TEXT_LINK)),
+                        (Filters.entity(MessageEntity.TEXT_LINK.lower().find("http") != -1))),
         share_url_callback)
     dp.add_handler(url_handler)
 
