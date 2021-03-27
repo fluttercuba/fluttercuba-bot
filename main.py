@@ -6,7 +6,7 @@ import re
 from dotenv import load_dotenv
 load_dotenv()
 
-REGEX_URL = 'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+'
+REGEX_URL = '[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
 
 
 def start(update, context):
@@ -29,12 +29,13 @@ def share_url_callback(update, context):
 
     matches_urls = re.findall(REGEX_URL, text_with_url)
     for url in matches_urls:
-        webhook = Webhook.from_url(
-            url=os.getenv("DISCORD_WEBHOOK"),
-            adapter=RequestsWebhookAdapter(),
-        )
-        webhook.send(url, username='fluttercuba-bot')
-        update.message.reply_text("compartiendo url...")
+        if "http" in url:
+            webhook = Webhook.from_url(
+                url=os.getenv("DISCORD_WEBHOOK"),
+                adapter=RequestsWebhookAdapter(),
+            )
+            webhook.send(url, username='fluttercuba-bot')
+            update.message.reply_text("compartiendo url...")
 
 
 def main():
