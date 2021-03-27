@@ -29,13 +29,12 @@ def share_url_callback(update, context):
 
     matches_urls = re.findall(REGEX_URL, text_with_url)
     for url in matches_urls:
-        if "http" in url:
-            webhook = Webhook.from_url(
-                url=os.getenv("DISCORD_WEBHOOK"),
-                adapter=RequestsWebhookAdapter(),
-            )
-            webhook.send(url, username='fluttercuba-bot')
-            update.message.reply_text("compartiendo url...")
+        webhook = Webhook.from_url(
+            url=os.getenv("DISCORD_WEBHOOK"),
+            adapter=RequestsWebhookAdapter(),
+        )
+        webhook.send(url, username='fluttercuba-bot')
+        update.message.reply_text("compartiendo url...")
 
 
 def main():
@@ -58,6 +57,7 @@ def main():
     updater.bot.set_webhook(
         "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"),
     )
+    # updater.start_polling()
 
     updater.idle()
 
