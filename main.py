@@ -6,7 +6,7 @@ import re
 from dotenv import load_dotenv
 load_dotenv()
 
-REGEX_URL = '[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
+REGEX_URL = '(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.][a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
 
 
 def start(update, context):
