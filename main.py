@@ -6,22 +6,11 @@ import re
 from dotenv import load_dotenv
 load_dotenv()
 
-REGEX_URL = '(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.][a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
+REGEX_URL = '(https?://\S+)'
 
 
 def start(update, context):
     update.message.reply_text("Hey Flutter Cuba ")
-
-
-def socials(update, context):
-    update.message.reply_text(
-        """
-        github: https://github.com/fluttercuba
-        discord: https://discord.gg/CtdVKf5w
-        telegram: https://t.me/fluttercuba
-        twitter: https://twitter.com/flutterCuba
-        """
-    )
 
 
 def share_url_callback(update, context):
@@ -42,7 +31,7 @@ def main():
     updater = Updater(os.getenv("TELEGRAM_TOKEN"))
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("info", socials))
+
     url_handler = MessageHandler(
         Filters.text & (Filters.entity(MessageEntity.URL) |
                         Filters.entity(MessageEntity.TEXT_LINK)),
@@ -57,7 +46,6 @@ def main():
     updater.bot.set_webhook(
         "https://fluttercubabot.herokuapp.com/" + os.getenv("TELEGRAM_TOKEN"),
     )
-    # updater.start_polling()
 
     updater.idle()
 
