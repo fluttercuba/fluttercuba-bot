@@ -6,6 +6,8 @@ import re
 from dotenv import load_dotenv
 load_dotenv()
 
+from code_carbon import code_command
+
 REGEX_URL = '(https?://\S+)'
 
 
@@ -31,6 +33,7 @@ def main():
     updater = Updater(os.getenv("TELEGRAM_TOKEN"))
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(code_command)
 
     url_handler = MessageHandler(
         Filters.text & (Filters.entity(MessageEntity.URL) |
